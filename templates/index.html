@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Enhancer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            color: #4caf50;
+            margin-bottom: 30px;
+            font-size: 54px;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+            margin-top: 30px
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: 500;
+            font-size: 16px;
+            text-align: left;
+        }
+        input[type="date"] {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        input[type="date"]:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4caf50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        #progress-bar {
+            width: 100%;
+            background-color: rgb(124, 122, 122);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
+            display: none;
+            text-align: center;
+        }
+        #progress-bar div {
+            height: 30px;
+            width: 0%;
+            background-color: #4caf50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            transition: width 0.4s ease;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+        .risk-bar {
+            width: 100%;
+            height: 20px;
+            border-radius: 10px;
+            background: linear-gradient(to right, green, yellow, red);
+            overflow: hidden;
+            position: relative;
+        }
+        .risk-bar div {
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .risk-line {
+            height: 20px;
+            width: 2px;
+            background-color: black;
+            position: absolute;
+            top: 0;
+        }
+        .instructions {
+            width: 90%;
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .instructions h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .instructions p {
+            line-height: 1.6;
+        }
+        .graph-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .graph-container img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        .graph-description {
+            margin-top: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555;
+            text-align: center;
+        }
+        .tab-container {
+            margin-top: 30px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .tabs ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tabs li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .tabs li a {
+            text-decoration: none;
+            color: white;
+            display: block;
+            padding: 10px;
+            background-color: #4caf50;
+        }
+        .tabs li a:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .selected-stocks {
+            margin-top: 20px;
+        }
+        .selected-stocks ul {
+            list-style: none;
+            padding: 0;
+        }
+        .selected-stocks li {
+            display: flex;
+            justify-content: space-evenly;
+            padding: 5px 0;
+        }
+        .selected-stocks button {
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .selected-stocks button:hover {
+            text-decoration: underline;
+        } 
+        .combined-performance-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .combined-performance-container h2 {
+            color: #333;
+        }
+
+        .combined-performance-container p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .combined-performance-container strong {
+            color: #4caf50;
+        }
+    </style>
+    <script>
+        function getBestStocks() {
+            const futureDate = document.getElementById('future_date').value;
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            progressBar.style.display = 'block';
+
+            // Initialize progress bar
+            progressBar.firstElementChild.style.width = '0%';
+            progressText.innerText = 'Processing...';
+
+            // Send AJAX request to the server
+            fetch('/get_best_stocks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ future_date: futureDate }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                progressBar.firstElementChild.style.width = '100%';
+                progressText.innerText = 'Completed';
+                // Update the table with results
+                const table = document.getElementById('stocks-table');
+                table.innerHTML = `<tr>
+                    <th>Ticker</th>
+                    <th>Growth Potential</th>
+                    <th>Risk Factor</th>
+                </tr>`;
+                data.best_stocks.forEach(stock => {
+                    const row = document.createElement('tr');
+                    const riskFactor = stock[2];
+                    const riskPercent = Math.min(Math.max((riskFactor / 10) * 100, 0), 100); // Normalize risk factor to percentage
+                    row.innerHTML = `<td>${stock[0]}</td><td>${(stock[1]*100).toFixed(2)}%</td>
+                        <td>
+                            <div class="risk-bar">
+                                <div class="risk-line" style="left: ${riskPercent}%;"></div>
+                            </div>
+                            ${riskFactor.toFixed(2)}
+                        </td>`;
+                    table.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                progressText.innerText = 'Error occurred';
+            });
+        }
+    let selectedStocks = [];
+
+        function loadStockOptions() {
+            fetch('/get_stock_tickers')
+                .then(response => response.json())
+                .then(data => {
+                    const stockDropdown = document.getElementById('stock_dropdown');
+                    data.tickers.forEach(ticker => {
+                        const option = document.createElement('option');
+                        option.value = ticker;
+                        option.text = ticker;
+                        stockDropdown.add(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function addStock() {
+    const stockDropdown = document.getElementById('stock_dropdown');
+    const selectedOption = stockDropdown.options[stockDropdown.selectedIndex].value;
+
+    if (selectedOption && !selectedStocks.some(stock => stock.ticker === selectedOption)) {
+        const stockObj = { ticker: selectedOption, allocation: 0.00 };
+        selectedStocks.push(stockObj);
+        renderSelectedStocks();
+    }
+}
+
+function renderSelectedStocks() {
+    const stockList = document.getElementById('selected-stocks-list');
+    stockList.innerHTML = '';  // Clear existing stocks
+
+    selectedStocks.forEach(stock => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            ${stock.ticker} - 
+            <label>Allocation: <input type="number" step="0.01" min="0" max="100" value="${stock.allocation}" 
+                onchange="updateAllocation('${stock.ticker}', this.value)">%</label>
+            <button onclick="removeStock('${stock.ticker}')">Remove</button>
+        `;
+        stockList.appendChild(listItem);
+    });
+}
+
+function updateAllocation(ticker, value) {
+    const stock = selectedStocks.find(stock => stock.ticker === ticker);
+    if (stock) {
+        stock.allocation = parseFloat(value);
+    }
+}
+
+function removeStock(ticker) {
+    const index = selectedStocks.findIndex(stock => stock.ticker === ticker);
+    if (index > -1) {
+        selectedStocks.splice(index, 1);
+        renderSelectedStocks();
+    }
+}
+
+function getPortfolioPerformance() {
+    const futureDate = document.getElementById('portfolio_future_date').value;
+    const progressBar = document.getElementById('portfolio-progress-bar');
+    const progressText = document.getElementById('portfolio-progress-text');
+    progressBar.style.display = 'block';
+
+    // Initialize progress bar
+    progressBar.firstElementChild.style.width = '0%';
+    progressText.innerText = 'Processing...';
+
+    // Send AJAX request to the server
+    fetch('/get_portfolio_performance', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            future_date: futureDate,
+            selected_stocks: selectedStocks
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        progressBar.firstElementChild.style.width = '100%';
+        progressText.innerText = 'Completed';
+        
+        // Update the table with results
+        const table = document.getElementById('portfolio-table');
+        table.innerHTML = `<tr>
+            <th>Ticker</th>
+            <th>Growth Potential</th>
+            <th>Risk Factor</th>
+            <th>Allocation</th>
+        </tr>`;
+        data.stocks.forEach(stock => {
+            const row = document.createElement('tr');
+            const riskFactor = stock.risk_factor;
+            const riskPercent = Math.min(Math.max((riskFactor / 10) * 100, 0), 100); // Normalize risk factor to percentage
+            row.innerHTML = `<td>${stock.ticker}</td>
+                <td>${(stock.growth * 100).toFixed(2)}%</td>
+                <td>
+                    <div class="risk-bar">
+                        <div class="risk-line" style="left: ${riskPercent}%;"></div>
+                    </div>
+                    ${riskFactor.toFixed(2)}
+                </td>
+                <td>${(stock.allocation * 100).toFixed(2)}%</td>`;
+            table.appendChild(row);
+        });
+
+        // Display combined potential growth
+        document.getElementById('combined-growth').innerText = `Combined Potential Growth: ${data.combined_growth.toFixed(2)}%`;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        progressText.innerText = 'Error occurred';
+    });
+	}
+
+        window.onload = function() {
+            loadStockOptions();
+        };
+         function getCombinedPerformance() {
+            const futureDate = document.getElementById('future_date').value;
+
+            fetch('/get_combined_performance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    future_date: futureDate
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error(data.error);
+                    return;
+                }
+
+                document.getElementById('actual-gain-loss').textContent = `$${data.actual_gain_loss.toFixed(2)}`;
+                document.getElementById('predicted-gain-loss').textContent = `$${data.predicted_gain_loss.toFixed(2)}`;
+                document.getElementById('model-performance-difference').textContent = `$${data.model_performance_difference.toFixed(2)}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        //function loadPerformanceGraph() {
+            //const img = document.getElementById('performance-graph');
+            //img.src = '/generate_graph?' + new Date().getTime(); // Avoid caching
+        //}
+
+        //window.onload = function() {
+            //loadPerformanceGraph();
+        //};
+    </script>
+</head>
+<body>
+    <h1>Portfolio Enhancer</h1>
+    <div class="instructions">
+        <h2>How to Use This Page</h2>
+        <p>
+            This tool allows you to predict the potential growth and risk factor of different stocks for a specified future date with the help of RNN and LSTM.
+        </p>
+        <ol>
+            <li>Select a future date using the date picker.</li>
+            <li>Click the "Get Best Stocks" button to start the prediction process.</li>
+            <li>Wait for the progress bar to complete and view the table of results below.</li>
+            <li>Alternatively click the "Portfolio Calculator" button to calculate your portfolio.</li>
+            <li>From the dropdown select the stock tickers that you have in your portfolio and add them to the list.</li>
+            <li>Select a future date using the date picker and click "Calculate Portfolio" to check your portfolio's expected gain/loss.</li>
+        </ol>
+        <p>
+            The table will display the top stocks with their ticker symbols, growth potential, and risk factors. Use this information to make informed investment decisions.
+        </p>
+    </div>
+    <div class="container">
+        <ul class="tabs">
+            <li><a href="#" onclick="showTab('best_stocks_tab')">Best Stocks</a></li>
+            <li><a href="#" onclick="showTab('portfolio_tab')">Portfolio Calculator</a></li>
+        </ul>
+
+        <!-- Best Stocks Tab -->
+        <div id="best_stocks_tab" class="tab-content active">
+            <form id="stock-form" onsubmit="event.preventDefault(); getBestStocks();">
+                <label for="future_date">Future Date:</label>
+                <input type="date" id="future_date" name="future_date" value="{{ future_date }}">
+                <button type="submit">Get Best Stocks</button>
+            </form>
+            <div id="progress-bar">
+                <div id="progress-text">Processing...</div>
+            </div>
+            <table id="stocks-table">
+                <tr>
+                    <th>Ticker</th>
+                    <th>Growth Potential</th>
+                    <th>Risk Factor</th>
+                </tr>
+                <!-- Results will be inserted here -->
+            </table>
+        </div>
+
+        <!-- Portfolio Calculator Tab -->
+        <div id="portfolio_tab" class="tab-content">
+            <form id="portfolio-form" onsubmit="event.preventDefault(); getPortfolioPerformance();">
+    		<label for="stock_dropdown">Select Stocks:</label>
+    		<select id="stock_dropdown" name="stocks" multiple>
+        <!-- Options will be populated dynamically -->
+    		</select>
+    		<button type="button" onclick="addStock()">Add to Portfolio</button>
+
+    		<div class="selected-stocks">
+        		<h3>Selected Stocks</h3>
+        		<ul id="selected-stocks-list">
+            <!-- Selected stocks will be listed here with allocation input fields -->
+        		</ul>
+    		</div>
+
+    		<label for="portfolio_future_date">Future Date:</label>
+    		<input type="date" id="portfolio_future_date" name="portfolio_future_date" value="{{ future_date }}">
+    		<button type="submit">Calculate Portfolio</button>
+	</form>
+
+            <div class="selected-stocks">
+                <h3>Selected Stocks</h3>
+                <ul id="selected_stocks">
+                    <!-- Selected stocks will be listed here -->
+                </ul>
+            </div>
+            <div id="portfolio-progress-bar">
+                <div id="portfolio-progress-text">Processing...</div>
+            </div>
+            <table id="portfolio-table">
+                <tr>
+                    <th>Ticker</th>
+                    <th>Growth Potential</th>
+                    <th>Risk Factor</th>
+                </tr>
+                <!-- Results will be inserted here -->
+            </table>
+            <div id="combined-growth">
+                <!-- Combined growth will be displayed here -->
+            </div>
+        </div>
+    </div>
+    <div class="combined-performance-container">
+        <h2>Combined Stock Performance from January 1, 2023 to July 31, 2023</h2>
+        <h3>Fixed initial investment of 2000$</h3>
+    	<p>Actual Gain/Loss: ${{ performance_data['actual_gain_loss']|round(2) }}</p>
+    	<p>Predicted Gain/Loss: ${{ performance_data['predicted_gain_loss']|round(2) }}</p>
+    	<p>Difference: ${{ performance_data['difference']|round(2) }} (How much gain/loss the model expected in relation to actual gain/loss)</p>
+    	<p>Percentage Difference: {{ performance_data['percentage_difference']|round(2) }}%</p>
+    </div>
+    <div class="graph-container">
+        <img id="performance-graph" src="{{ url_for('static', filename='stock_gain_loss_comparison.png') }}" alt="Performance Graph">
+        <div class="graph-description">
+            <p>
+                The above graph compares the actual stock prices with the predicted stock prices for the period between January 1st 2023 and July 31st 2023. The graph was created to visualize how accurately the model has predicted the stock prices for 7 random stocks.
+            </p>
+        </div>
+    </div>
+    <script>
+    function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+        }
+        </script>
+</body>
+</html>
